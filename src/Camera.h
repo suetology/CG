@@ -23,13 +23,17 @@ private:
 	float pitch;
 	float rotationSensivity;
 	float moveSpeed;
+	bool isRotating;
 
 public:
 
 	Camera(glm::vec3 position = glm::vec3(0.0f));
 
 	inline glm::vec3 GetPosition() { return position; }
+	inline glm::vec3 GetFront() { return front; }
 
+	inline void DisableRotation() { isRotating = false; }
+	inline void EnableRotation() { isRotating = true; }
 	inline void SetMoveSpeed(float speed) { moveSpeed = speed; }
 
 	void Move();

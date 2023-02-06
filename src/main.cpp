@@ -29,7 +29,6 @@ int main()
 {
     Events::Init();
     Window::Init("best graphics engine", 1280, 840, glm::vec3(0.3f, 0.3f, 0.3f));
-    glfwSetInputMode(Window::Get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
     Shader* lineShader = load_shader("res/line.vertex", "res/line.fragment");
 
@@ -98,7 +97,11 @@ int main()
     cubeShader->UniformVec3f("uLight.ambient", glm::vec3(0.4f, 0.4f, 0.4f));
     cubeShader->UniformVec3f("uLight.diffuse", glm::vec3(0.7f, 0.7f, 0.7f));
     cubeShader->UniformVec3f("uLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-    cubeShader->UniformVec3f("uLight.position", glm::vec3(10.0f, 10.0f, 7.0f));
+    cubeShader->UniformFloat("uLight.constant", 1.0f);
+    cubeShader->UniformFloat("uLight.linear", 0.0014);
+    cubeShader->UniformFloat("uLight.quadratic", 0.000007);
+    cubeShader->UniformFloat("uLight.innerCutoff", glm::cos(glm::radians(12.5f)));
+    cubeShader->UniformFloat("uLight.outerCutoff", glm::cos(glm::radians(15.0f)));
 
     crateTexture->Bind();
     cubeShader->UniformInt("uMaterial.diffuse", crateTexture->GetTextureNumber());
@@ -121,6 +124,17 @@ int main()
     {
         Window::Clear();
 
+        if (Events::GetMouseButtonDown(MOUSE_BUTTON_RIGHT))
+        {
+            glfwSetInputMode(Window::Get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            camera->EnableRotation();
+        }
+        else if (Events::GetMouseButtonUp(MOUSE_BUTTON_RIGHT))
+        {
+            glfwSetInputMode(Window::Get(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            camera->DisableRotation();
+        }
+
         if (Events::GetKeyDown(KEY_ESCAPE))
             Window::Close();
 
@@ -134,6 +148,8 @@ int main()
         cubeVbo->Bind();
 
         cubeShader->Use();
+        cubeShader->UniformVec3f("uLight.position", camera->GetPosition());
+        cubeShader->UniformVec3f("uLight.direction", camera->GetFront());
         cubeShader->UniformVec3f("uViewPosition", camera->GetPosition());
         cubeShader->UniformMat4f("uModel", model);
         cubeShader->UniformMat4f("uView", camera->GetLookAtMatrix());

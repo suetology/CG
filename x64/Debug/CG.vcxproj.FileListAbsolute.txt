@@ -1,1 +1,2 @@
 C:\Users\rt\Desktop\it\Visual Studio\c++\CG\CG\x64\Debug\CG.exe
+C:\Users\vitas\Desktop\IT\VisualStudio\CG\x64\Debug\CG.exe

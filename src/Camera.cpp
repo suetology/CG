@@ -16,6 +16,7 @@ Camera::Camera(glm::vec3 position)
 	pitch = 0.0f;
 	moveSpeed = 1.0f;
 	rotationSensivity = 1.0f;
+	isRotating = true;
 }
 
 void Camera::Move()
@@ -75,6 +76,10 @@ void Camera::Move()
 
 void Camera::Rotate()
 {
+	if (!isRotating)
+	{
+		return;
+	}
 	yaw += rotationSensivity * Events::GetMouseDelta().x * 0.1f;
 	pitch += rotationSensivity * Events::GetMouseDelta().y * 0.1f;
 
