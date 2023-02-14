@@ -47,10 +47,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\basic.vertex" />
-    <None Include="res\basic.fragment" />
-    <None Include="res\line.fragment" />
-    <None Include="res\line.vertex" />
+    <None Include="res\basic.vert" />
+    <None Include="res\basic.frag" />
+    <None Include="res\line.frag" />
+    <None Include="res\line.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Window.h">

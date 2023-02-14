@@ -30,7 +30,7 @@ int main()
     Events::Init();
     Window::Init("best graphics engine", 1280, 840, glm::vec3(0.3f, 0.3f, 0.3f));
     
-    Shader* lineShader = load_shader("res/line.vertex", "res/line.fragment");
+    Shader* lineShader = load_shader("res/line.vert", "res/line.frag");
 
     float gridVertices[] = {
         0.0f, 0.0f, -1000.0f,
@@ -92,16 +92,21 @@ int main()
 
     Texture* crateTexture = new Texture("res/container.png");
     Texture* crateSpecularTexture = new Texture("res/container_specular.png");
-    Shader* cubeShader = load_shader("res/basic.vertex", "res/basic.fragment");
+    Shader* cubeShader = load_shader("res/basic.vert", "res/basic.frag");
     cubeShader->Use();
-    cubeShader->UniformVec3f("uLight.ambient", glm::vec3(0.4f, 0.4f, 0.4f));
-    cubeShader->UniformVec3f("uLight.diffuse", glm::vec3(0.7f, 0.7f, 0.7f));
-    cubeShader->UniformVec3f("uLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-    cubeShader->UniformFloat("uLight.constant", 1.0f);
-    cubeShader->UniformFloat("uLight.linear", 0.0014);
-    cubeShader->UniformFloat("uLight.quadratic", 0.000007);
-    cubeShader->UniformFloat("uLight.innerCutoff", glm::cos(glm::radians(12.5f)));
-    cubeShader->UniformFloat("uLight.outerCutoff", glm::cos(glm::radians(15.0f)));
+    cubeShader->UniformVec3f("uSpotlight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
+    cubeShader->UniformVec3f("uSpotlight.diffuse", glm::vec3(0.7f, 0.7f, 0.7f));
+    cubeShader->UniformVec3f("uSpotlight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    cubeShader->UniformFloat("uSpotlight.constant", 1.0f);
+    cubeShader->UniformFloat("uSpotlight.linear", 0.0014);
+    cubeShader->UniformFloat("uSpotlight.quadratic", 0.000007);
+    cubeShader->UniformFloat("uSpotlight.innerCutoff", glm::cos(glm::radians(12.5f)));
+    cubeShader->UniformFloat("uSpotlight.outerCutoff", glm::cos(glm::radians(15.0f)));
+
+    cubeShader->UniformVec3f("uDirLight.direction", glm::vec3(1.0f, 1.0f, 1.0f));
+    cubeShader->UniformVec3f("uDirLight.ambient", glm::vec3(0.4f, 0.4f, 0.4f));
+    cubeShader->UniformVec3f("uDirLight.diffuse", glm::vec3(0.7f, 0.7f, 0.7f));
+    cubeShader->UniformVec3f("uDirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 
     crateTexture->Bind();
     cubeShader->UniformInt("uMaterial.diffuse", crateTexture->GetTextureNumber());
@@ -148,8 +153,8 @@ int main()
         cubeVbo->Bind();
 
         cubeShader->Use();
-        cubeShader->UniformVec3f("uLight.position", camera->GetPosition());
-        cubeShader->UniformVec3f("uLight.direction", camera->GetFront());
+        cubeShader->UniformVec3f("uSpotlight.position", camera->GetPosition());
+        cubeShader->UniformVec3f("uSpotlight.direction", camera->GetFront());
         cubeShader->UniformVec3f("uViewPosition", camera->GetPosition());
         cubeShader->UniformMat4f("uModel", model);
         cubeShader->UniformMat4f("uView", camera->GetLookAtMatrix());
